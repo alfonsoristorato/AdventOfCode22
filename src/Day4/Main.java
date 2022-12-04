@@ -24,16 +24,16 @@ public class Main {
         for (String pair : inputArray) {
             String elf1Range = pair.split(",")[0];
             String elf2Range = pair.split(",")[1];
-            Supplier<IntStream> elf1RangeArray = () -> IntStream.range(Integer.parseInt(elf1Range.split("-")[0]),
+            Supplier<IntStream> elf1RangeStream = () -> IntStream.range(Integer.parseInt(elf1Range.split("-")[0]),
                     Integer.parseInt(elf1Range.split("-")[1]) + 1);
-            Supplier<IntStream> elf2RangeArray = () -> IntStream.range(Integer.parseInt(elf2Range.split("-")[0]),
+            Supplier<IntStream> elf2RangeStream = () -> IntStream.range(Integer.parseInt(elf2Range.split("-")[0]),
                     Integer.parseInt(elf2Range.split("-")[1]) + 1);
             // Part1
-            if (intStreamContainsAnother(elf1RangeArray, elf2RangeArray, "allMatch")) {
+            if (intStreamContainsAnother(elf1RangeStream, elf2RangeStream, "allMatch")) {
                 sameRange++;
             }
             // Part2
-            if (intStreamContainsAnother(elf1RangeArray, elf2RangeArray, "notAllMatch")) {
+            if (intStreamContainsAnother(elf1RangeStream, elf2RangeStream, "notAllMatch")) {
                 overlappingRange++;
             }
         }
