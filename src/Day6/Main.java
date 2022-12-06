@@ -26,6 +26,10 @@ public class Main {
         Integer charPosition = 0;
         for (int i = 0; i < input.length(); i++) {
             Character singChar = input.charAt(i);
+            if (distinctChars.size() == lengthOfMarker) {
+                charPosition = i;
+                break;
+            }
             if (!distinctChars.contains(singChar)) {
                 distinctChars.add(singChar);
             } else {
@@ -33,11 +37,7 @@ public class Main {
                 distinctChars.clear();
             }
 
-            if (distinctChars.size() == lengthOfMarker) {
 
-                charPosition = i+1;
-                break;
-            }
         }
         return charPosition;
     }
