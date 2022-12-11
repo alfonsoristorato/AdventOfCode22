@@ -1,21 +1,22 @@
 package Day11;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public class Monkey {
     public Integer id;
-    public List<Long> itemsHeld;
+    public List<BigInteger> itemsHeld;
     public String operationCommand;
     public Integer test;
     public Integer ifTrue;
     public Integer ifFalse;
-    public Integer itemsInspected;
+    public Long itemsInspected;
 
-    public Integer getItemsInspected() {
+    public Long getItemsInspected() {
         return itemsInspected;
     }
 
-    public Monkey(Integer id, List<Long> itemsHeld, String operationCommand, Integer test, Integer ifTrue,
+    public Monkey(Integer id, List<BigInteger> itemsHeld, String operationCommand, Integer test, Integer ifTrue,
             Integer ifFalse) {
         this.id = id;
         this.itemsHeld = itemsHeld;
@@ -23,22 +24,27 @@ public class Monkey {
         this.test = test;
         this.ifTrue = ifTrue;
         this.ifFalse = ifFalse;
-        this.itemsInspected = 0;
+        this.itemsInspected = (long) 0;
     }
 
-    public Long doOperation(Long item, String operationCommand) {
+    public BigInteger doOperation(BigInteger item, String operationCommand, Boolean divideWorry) {
         Character operation = operationCommand.charAt(0);
         String operationValue = operationCommand.split("\\s")[1].replaceAll("\\s", "");
-        Long operationValueInt = !operationValue.equals("old") ? Integer.parseInt(operationValue) : item;
+        BigInteger operationValueInt = !operationValue.equals("old") ? new BigInteger(operationValue) : item;
 
         switch (operation) {
             case '+' -> {
-                item = item + operationValueInt;
+                item = item.add(operationValueInt);
             }
-            case '*' -> {
-                item = item * operationValueInt;
+            default -> {
+                item = item.multiply(operationValueInt);
             }
 
+        }
+        if (!divideWorry) {
+            // as BigInt would overflow its max, we reduce its value bye calculating
+            // the remainder of itself against the multiplication of all divideBy
+            item = item.remainder(BigInteger.valueOf(9_699_690));
         }
         return item;
     }
