@@ -27,7 +27,8 @@ public class Monkey {
         this.itemsInspected = (long) 0;
     }
 
-    public BigInteger doOperation(BigInteger item, String operationCommand, Boolean divideWorry) {
+    public BigInteger doOperation(BigInteger item, String operationCommand, Boolean divideWorry,
+            BigInteger remainderDivisor) {
         Character operation = operationCommand.charAt(0);
         String operationValue = operationCommand.split("\\s")[1].replaceAll("\\s", "");
         BigInteger operationValueInt = !operationValue.equals("old") ? new BigInteger(operationValue) : item;
@@ -44,7 +45,7 @@ public class Monkey {
         if (!divideWorry) {
             // as BigInt would overflow its max, we reduce its value bye calculating
             // the remainder of itself against the multiplication of all divideBy
-            item = item.remainder(BigInteger.valueOf(9_699_690));
+            item = item.remainder(remainderDivisor);
         }
         return item;
     }
