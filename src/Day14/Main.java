@@ -105,6 +105,8 @@ public class Main {
             if (stepDown.y >= highestY) {
                 sandCanDrop = false;
             }
+
+            // for part 2, part 1 would never reach this point as there's no floor
             if (grid.containsKey(new Point(500, 1)) && grid.containsKey(new Point(499, 1))
                     && grid.containsKey(new Point(501, 1))) {
                 sandCanDrop = false;
