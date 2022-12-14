@@ -20,6 +20,21 @@ public class Main {
             System.out.println(e);
         }
         Map<Point, String> grid = new HashMap<>();
+        Integer[] edgeCoordinates = fillGridWithRocks(input, grid);
+        Map<Point, String> grid2 = new HashMap<>(grid);
+        Integer lowestX = edgeCoordinates[0];
+        Integer highestX = edgeCoordinates[1];
+        Integer highestY = edgeCoordinates[2];
+
+        System.out.println(fillGridWithSand(lowestX, highestX, highestY, grid));
+
+        for (int x = lowestX - 10000; x <= highestX + 10000; x++) {
+            grid2.put(new Point(x, highestY + 2), "Rock");
+        }
+        System.out.println(fillGridWithSand(lowestX, highestX, highestY + 2, grid2));
+    }
+
+    static Integer[] fillGridWithRocks(List<String> input, Map<Point, String> grid) {
         Integer lowestX = Integer.MAX_VALUE;
         Integer highestX = Integer.MIN_VALUE;
         Integer highestY = Integer.MIN_VALUE; // lowest would have been more appropriate, as we are going down
@@ -36,10 +51,12 @@ public class Main {
                     highestX = xStart;
                 if (xStart < lowestX)
                     lowestX = xStart;
+
                 if (xEnd > highestX)
                     highestX = xEnd;
-                if (xStart < lowestX)
-                    lowestX = xStart;
+                if (xEnd < lowestX)
+                    lowestX = xEnd;
+
                 if (yEnd > highestY)
                     highestY = yEnd;
                 // same x
@@ -74,18 +91,22 @@ public class Main {
                 }
             }
         }
+        return new Integer[] { lowestX, highestX, highestY };
+    }
 
+    static Integer fillGridWithSand(Integer lowestX, Integer highestX, Integer highestY, Map<Point, String> grid) {
         Boolean sandCanDrop = true;
         Point sandStart = new Point(500, 0);
         Point stepDown = sandStart;
         Integer placements = 0;
-        System.out.println(highestX);
-        System.out.println(lowestX);
-        System.out.println(highestY);
         while (sandCanDrop) {
-            // if stepDown.x < lowest point.x
+            // if stepDown.y >= highest (which means lowest) point y
             // going into abyss, stop loop
-            if (stepDown.x <= lowestX || stepDown.x >= highestX || stepDown.y >= highestY) {
+            if (stepDown.y >= highestY) {
+                sandCanDrop = false;
+            }
+            if (grid.containsKey(new Point(500, 1)) && grid.containsKey(new Point(499, 1))
+                    && grid.containsKey(new Point(501, 1))) {
                 sandCanDrop = false;
             }
 
@@ -120,8 +141,6 @@ public class Main {
 
             }
         }
-        System.out.println(placements);
-
+        return placements;
     }
-
 }
