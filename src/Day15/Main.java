@@ -22,8 +22,9 @@ public class Main {
             System.out.println(e);
         }
         List<Point> pointsList = new ArrayList<>();
-        Set<Point> grid2 = new HashSet<>();
+        Set<Point> invalidPoints = new HashSet<>();
         Map<Point, String> grid = new HashMap<>();
+        Integer y = 2000000;
         for (String line : input) {
             String sensorInput = line.split(":")[0];
             String beaconInput = line.split(":")[1];
@@ -42,54 +43,41 @@ public class Main {
             Point beacon = pointsList.get(i + 1);
             grid.put(sensor, "S");
             grid.put(beacon, "B");
+            for (int x = 0; x < 2; x ++) {
 
-        }
-        for (int i = 0; i < pointsList.size(); i += 2) {
-            Point sensor = pointsList.get(i);
-            Point beacon = pointsList.get(i + 1);
-            Integer yDiff = Math.abs(sensor.y - beacon.y);
-            Integer xDiff = Math.abs(sensor.x - beacon.x);
-            Integer yMin = Math.min(sensor.y, beacon.y);
-            Integer yMax = Math.max(sensor.y, beacon.y);
-            Integer totalDiff = yDiff + xDiff; // apparently this is called manatthan distance
-            Integer y = 10;
-            if (yMin > 10)
-                continue;
-            for (int x = sensor.x; x <= (totalDiff - yDiff) + sensor.x; x++) {
-                if (!grid.containsKey(new Point(x, y))) {
-                    Point pointRight = new Point(x, y);
-                    grid2.add(pointRight);
+                Integer yDiff = Math.abs(sensor.y - beacon.y);
+                Integer xDiff = Math.abs(sensor.x - beacon.x);
+                Integer yMin = Math.min(sensor.y, beacon.y);
+                Integer yMax = Math.max(sensor.y, beacon.y);
+                Integer totalDiff = yDiff + xDiff; // apparently this is called manatthan distance
+                Integer remaining;
+
+                if(sensor.y > y){
+                    remaining = totalDiff - (sensor.y -y);
+                }else{
+                    remaining = totalDiff - (y- sensor.y);
+                }
+                if (remaining < 0){
+                    continue;
                 }
 
-                if (!grid.containsKey(new Point(x - (totalDiff - yDiff), y))) {
-                    Point pointLeft = new Point(x - (totalDiff - yDiff), y);
-                    grid2.add(pointLeft);
+                for (int j = 0; j <= remaining; j++) {
+                    if (!grid.containsKey(new Point(sensor.x + j, y))) {
+                        Point pointRight = new Point(sensor.x + j, y);
+                        invalidPoints.add(pointRight);
+                    }
+
+                    if (!grid.containsKey(new Point(sensor.x-j,y))) {
+                        Point pointLeft = new Point(sensor.x -j,y);
+                        invalidPoints.add(pointLeft);
+                    }
                 }
-
-                // if (y != sensor.y) {
-                // if (!grid.containsKey(new Point(x, y))) {
-                // Point pointUpRight = new Point(x, y);
-                // grid2.add(pointUpRight);
-                // }
-
-                // if (!grid.containsKey(new Point(x - totalDiff, y))) {
-                // Point pointUpLeft = new Point(x - totalDiff, y);
-                // grid2.add(pointUpLeft);
-                // }
-                // }
             }
+
         }
 
-        Integer counter = 0;
-        for (var x : grid2) {
-            if (x.y == 10) {
-                // 2000000
-                // 1000000
-                System.out.println(x);
-                counter++;
-            }
-        }
-        System.out.println(counter);
+
+        System.out.println(invalidPoints.size());
     }
 
 }
