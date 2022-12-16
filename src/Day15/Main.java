@@ -42,38 +42,42 @@ public class Main {
             Point beacon = pointsList.get(i + 1);
             grid.put(sensor, "S");
             grid.put(beacon, "B");
+
+        }
+        for (int i = 0; i < pointsList.size(); i += 2) {
+            Point sensor = pointsList.get(i);
+            Point beacon = pointsList.get(i + 1);
             Integer yDiff = Math.abs(sensor.y - beacon.y);
             Integer xDiff = Math.abs(sensor.x - beacon.x);
+            Integer yMin = Math.min(sensor.y, beacon.y);
+            Integer yMax = Math.max(sensor.y, beacon.y);
             Integer totalDiff = yDiff + xDiff; // apparently this is called manatthan distance
-            Integer goingDown = 0;
-            for (int y = sensor.y; y < sensor.y + totalDiff; y++) {
-                for (int x = sensor.x; x <= sensor.x + totalDiff - goingDown; x++) {
-                    if (!grid.containsKey(new Point(x, y))) {
-                        Point pointRight = new Point(x, y);
-                        grid2.add(pointRight);
-                    }
-
-                    if (!grid.containsKey(new Point(x - totalDiff + goingDown, y))) {
-                        Point pointLeft = new Point(x - totalDiff + goingDown, y);
-                        grid2.add(pointLeft);
-                    }
-
-                    if (y != sensor.y) {
-                        if (!grid.containsKey(new Point(x, y - goingDown - goingDown))) {
-                            Point pointUpRight = new Point(x, y - goingDown - goingDown);
-                            grid2.add(pointUpRight);
-                        }
-
-                        if (!grid.containsKey(new Point(x - totalDiff + goingDown, y - goingDown - goingDown))) {
-                            Point pointUpLeft = new Point(x - totalDiff + goingDown, y - goingDown - goingDown);
-                            grid2.add(pointUpLeft);
-                        }
-                    }
+            Integer y = 10;
+            if (yMin > 10)
+                continue;
+            for (int x = sensor.x; x <= (totalDiff - yDiff) + sensor.x; x++) {
+                if (!grid.containsKey(new Point(x, y))) {
+                    Point pointRight = new Point(x, y);
+                    grid2.add(pointRight);
                 }
-                goingDown++;
 
+                if (!grid.containsKey(new Point(x - (totalDiff - yDiff), y))) {
+                    Point pointLeft = new Point(x - (totalDiff - yDiff), y);
+                    grid2.add(pointLeft);
+                }
+
+                // if (y != sensor.y) {
+                // if (!grid.containsKey(new Point(x, y))) {
+                // Point pointUpRight = new Point(x, y);
+                // grid2.add(pointUpRight);
+                // }
+
+                // if (!grid.containsKey(new Point(x - totalDiff, y))) {
+                // Point pointUpLeft = new Point(x - totalDiff, y);
+                // grid2.add(pointUpLeft);
+                // }
+                // }
             }
-
         }
 
         Integer counter = 0;
@@ -81,6 +85,7 @@ public class Main {
             if (x.y == 10) {
                 // 2000000
                 // 1000000
+                System.out.println(x);
                 counter++;
             }
         }
