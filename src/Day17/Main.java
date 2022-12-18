@@ -1,5 +1,6 @@
 package Day17;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,11 +22,10 @@ public class Main {
             System.out.println(e);
         }
         Set<Point> rocksStacked = new HashSet<>();
-        Integer rocksStackedCounter = 0;
         Integer maxY = -4;
         Integer iterations = 0;
         Integer rockShapeBuilder = 1;
-        while (rocksStackedCounter < 2022) {
+        while (rockShapeBuilder < 2023) {
             Rock rockFalling = buildRock(rockShapeBuilder % 5, maxY);
             Boolean rockStacked = false;
             rockShapeBuilder++;
@@ -50,21 +50,16 @@ public class Main {
                     for (Point point : rockFalling.getPoints()) {
                         rocksStacked.add(point);
                     }
-                    rocksStackedCounter++;
                     maxY = rockFalling.getMinY() - 4;
                     rockStacked = true;
                 }
-                // if (iterations >= commands.length()) {
-                // // end of commands, start from 0
-                // iterations = 0;
-                // }
             }
 
         }
+
         Point highest = rocksStacked.stream().sorted(Comparator.comparing(Point::getY)).findFirst()
                 .get();
         displayGraph(highest, rocksStacked);
-        System.out.println();
         System.out.println(highest.y);
 
     }
