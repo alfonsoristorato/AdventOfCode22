@@ -25,6 +25,7 @@ public class Main {
         Integer maxY = -4;
         Integer iterations = 0;
         Integer rockShapeBuilder = 1;
+        Point highest = new Point();
         while (rockShapeBuilder < 2023) {
             Rock rockFalling = buildRock(rockShapeBuilder % 5, maxY);
             Boolean rockStacked = false;
@@ -50,17 +51,17 @@ public class Main {
                     for (Point point : rockFalling.getPoints()) {
                         rocksStacked.add(point);
                     }
-                    maxY = rockFalling.getMinY() - 4;
+                    highest = rocksStacked.stream().min(Comparator.comparing(Point::getY)).get();
+                    maxY = highest.y - 4;
                     rockStacked = true;
                 }
             }
 
         }
 
-        Point highest = rocksStacked.stream().sorted(Comparator.comparing(Point::getY)).findFirst()
-                .get();
         displayGraph(highest, rocksStacked);
-        System.out.println(highest.y);
+        System.out.println();
+        System.out.println("Part 1 :" + Math.abs(highest.y));
 
     }
 
