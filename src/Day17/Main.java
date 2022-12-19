@@ -25,11 +25,15 @@ public class Main {
         Integer maxY = -4;
         Integer iterations = 0;
         Integer rockShapeBuilder = 1;
+        long max = 1000000000000L;
+        long previousHighestY = 0;
+        Boolean patternFound = false;
         Point highest = new Point();
-        while (rockShapeBuilder < 2023) {
+        while (rockShapeBuilder < max) {
             Rock rockFalling = buildRock(rockShapeBuilder % 5, maxY);
             Boolean rockStacked = false;
             rockShapeBuilder++;
+
             while (!rockStacked) {
 
                 if (commands.charAt(iterations % commands.length()) == '>') {
@@ -54,14 +58,39 @@ public class Main {
                     highest = rocksStacked.stream().min(Comparator.comparing(Point::getY)).get();
                     maxY = highest.y - 4;
                     rockStacked = true;
+                    // not the right way to find a pattern
+                    if (rockShapeBuilder > 2023
+                            && iterations % commands.length() == 0) {
+                        long remainder = max % rockShapeBuilder;
+                        long quotient = max / rockShapeBuilder;
+                        previousHighestY = highest.y * quotient;
+                        System.out.println("Found Pattern");
+                        System.out.println(".....");
+                        System.out.println("Moving loop up");
+                        rockShapeBuilder = rockShapeBuilder % 5;
+                        max = remainder + 1;
+                        patternFound = true;
+                    }
                 }
+
             }
+
+            if (rockShapeBuilder == 2023 && !patternFound) {
+                System.out.println("Part 1 :" + Math.abs(highest.y));
+            }
+            if (rockShapeBuilder == max - 1) {
+                long x = Math.abs(highest.y) + Math.abs(previousHighestY);
+                System.out.println("Part 2 :" + x);
+            }
+
+            // 1567840632818
+            // 1567840652109
+
+            // 1567840652106
 
         }
 
-        displayGraph(highest, rocksStacked);
-        System.out.println();
-        System.out.println("Part 1 :" + Math.abs(highest.y));
+        // displayGraph(highest, rocksStacked);
 
     }
 
